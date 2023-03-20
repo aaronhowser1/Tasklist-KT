@@ -1,7 +1,6 @@
 package tasklist
 
 import kotlinx.datetime.*
-import java.lang.RuntimeException
 
 //Automates setting date and time, but not lines nor the menu
 const val autorun = false
@@ -23,8 +22,18 @@ fun showMenu() {
                 break
             }
             "print" -> tasklist.printList()
-            "edit" -> edit()
-            "delete" -> deleteTask()
+            "edit" -> {
+                if (tasklist.size() != 0) tasklist.printList()
+                edit()
+            }
+            "delete" -> {
+                if (tasklist.size() == 0) {
+                    println("No tasks have been input")
+                } else {
+                    tasklist.printList()
+                    deleteTask()
+                }
+            }
             else -> println("The input action is invalid")
         }
     }
@@ -39,34 +48,47 @@ fun edit() {
     val input = inputFromPrompt("Input the task number (1-${tasklist.size()}):")
     if (input.lowercase() == "exit") return
 
-    val taskNumber = input.toInt()
-    if (taskNumber !in 1..tasklist.size()) {
+    try {
+        val taskNumber = input.toInt()
+        if (taskNumber !in 1..tasklist.size()) throw IllegalArgumentException()
+    } catch (e: Exception) {
         println("Invalid task number")
+        edit()
         return
     }
 
     val task = tasklist.getTask(input.toInt())
 
-    when (inputFromPrompt("Input a field to edit (priority, date, time, task):")) {
-        "priority" -> task.priority = inputPriority()
-        "date" -> task.date = inputDate()
-        "time" -> task.time = inputTime()
-        "task" -> task.lines = inputTaskLines()
-        else -> {
-            println("Invalid field")
-            edit()
+    while (true) {
+        when (inputFromPrompt("Input a field to edit (priority, date, time, task):")) {
+            "priority" -> {
+                task.priority = inputPriority()
+                break
+            }
+            "date" -> {
+                task.date = inputDate()
+                break
+            }
+            "time" -> {
+                task.time = inputTime()
+                break
+            }
+            "task" -> {
+                task.lines = inputTaskLines()
+                break
+            }
+            else -> println("Invalid field")
         }
     }
+
+    println("The task is changed")
+
 }
 
 fun deleteTask() {
-    if (tasklist.size() == 0) {
-        println("No tasks have been input")
-        return
-    }
     val input = inputFromPrompt("Input the task number (1-${tasklist.size()}):")
     if (input.lowercase() == "exit") return
-    tasklist.remove(input.toInt())
+    if (!tasklist.remove(input)) deleteTask()
 }
 
 fun addTask(tasklist: Tasklist) {
@@ -135,16 +157,19 @@ fun inputTime(): String {
     try {
         if (input.split(':').size != 2) throw RuntimeException("Time is not in hh:mm")
 
-        val hour = input.split(':').first().toInt()
-        val minute = input.split(':').last().toInt()
+        var hour = input.split(':').first()
+        var minute = input.split(':').last()
 
-        if (hour !in 0..23) throw RuntimeException("Hour $hour is not in 0-23")
-        if (minute !in 0..59) throw RuntimeException("Minute $minute is not in 0-59")
+        if (hour.toInt() !in 0..23) throw RuntimeException("Hour $hour is not in 0-23")
+        if (minute.toInt() !in 0..59) throw RuntimeException("Minute $minute is not in 0-59")
 
         // Unused, but will throw RuntimeException if invalid
-        val testLocalDateTime = LocalDateTime(1, 1, 1, hour, minute)
+        val testLocalDateTime = LocalDateTime(1, 1, 1, hour.toInt(), minute.toInt())
 
-        return input
+        if (hour.length == 1) hour = "0$hour"
+        if (minute.length == 1) minute = "0$minute"
+
+        return "$hour:$minute"
 
     } catch (e: RuntimeException) {
         println("The input time is invalid")

@@ -5,12 +5,18 @@ class Tasklist {
 
     fun add(task: Task) = list.add(task)
 
-    fun remove(taskNumber: Int) {
-        if (taskNumber in 1..list.size) {
-            list.removeAt(taskNumber-1)
-            println("The task is deleted")
-        } else {
+    // Returns true if it worked
+    fun remove(input: String): Boolean {
+        try {
+            val taskNumber = input.toInt()
+            if (taskNumber in 1..list.size) {
+                list.removeAt(taskNumber - 1)
+                println("The task is deleted")
+                return true
+            } else throw IllegalArgumentException()
+        } catch (e: Exception) {
             println("Invalid task number")
+            return false
         }
     }
 
