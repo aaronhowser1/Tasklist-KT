@@ -4,7 +4,7 @@ import kotlinx.datetime.*
 import java.lang.RuntimeException
 
 //Automates setting date and time, but not lines nor the menu
-const val autorun = false
+const val autorun = true
 
 val tasklist = Tasklist()
 
@@ -23,23 +23,47 @@ fun showMenu() {
                 break
             }
             "print" -> tasklist.printList()
-//            "edit" -> edit()
+            "edit" -> edit()
             "delete" -> deleteTask()
             else -> println("The input action is invalid")
         }
     }
 }
 
-fun deleteTask() {
-    val input = inputFromPrompt("Input the task number (1-<Maximum task number>):")
-    if (input.lowercase() == "exit") return
-    try {
-        val taskIndex = input.toInt()
-        if (taskIndex !in 1 .. tasklist.size()) throw IllegalArgumentException()
-    } catch (e: Exception) {
-        println("Invalid task number")
-        deleteTask()
+fun edit() {
+    if (tasklist.size() == 0) {
+        println("No tasks have been input")
+        return
     }
+
+    val input = inputFromPrompt("Input the task number (1-${tasklist.size()}):")
+    if (input.lowercase() == "exit") return
+
+    val taskNumber = input.toInt()
+    if (taskNumber !in 1..tasklist.size()) {
+        println("Invalid task number")
+        return
+    }
+
+    val task = tasklist.getTask(input.toInt())
+
+    when (inputFromPrompt("Input a field to edit (priority, date, time, task):")) {
+        "priority" -> task.edit("priority")
+        "date" -> task.edit("date")
+        "time" -> task.edit("time")
+        "task" -> task.edit("task")
+        else -> {
+            println("Invalid field")
+            edit()
+        }
+    }
+
+}
+
+fun deleteTask() {
+    val input = inputFromPrompt("Input the task number (1-${tasklist.size()}):")
+    if (input.lowercase() == "exit") return
+    tasklist.remove(input.toInt())
 }
 
 fun addTask(tasklist: Tasklist) {
@@ -106,7 +130,7 @@ fun inputTime(): String {
         inputFromPrompt("Input the time (hh:mm):")
     }
     try {
-        if (input?.split(':')?.size != 2) throw RuntimeException("Time is not in hh:mm")
+        if (input.split(':').size != 2) throw RuntimeException("Time is not in hh:mm")
 
         val hour = input.split(':').first().toInt()
         val minute = input.split(':').last().toInt()

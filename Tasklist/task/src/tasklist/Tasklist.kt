@@ -6,7 +6,12 @@ class Tasklist {
     fun add(task: Task) = list.add(task)
 
     fun remove(taskNumber: Int) {
-        if (taskNumber in 1..list.size) list.removeAt(taskNumber-1)
+        if (taskNumber in 1..list.size) {
+            list.removeAt(taskNumber-1)
+            println("The task is deleted")
+        } else {
+            println("Invalid task number")
+        }
     }
 
     fun printList() {
@@ -19,6 +24,8 @@ class Tasklist {
             task.printTask(taskIndex+1)
         }
     }
+
+    fun getTask(taskNumber: Int) = list[taskNumber-1]
 
     fun size() = list.size
 }

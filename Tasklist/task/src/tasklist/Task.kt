@@ -62,4 +62,8 @@ class Task(val lines: MutableList<String>, val priority: Priority, val date: Str
         return LocalDateTime(year, month, day, hour, minute)
     }
 
+    fun edit(field: String) {
+
+    }
+
 }
