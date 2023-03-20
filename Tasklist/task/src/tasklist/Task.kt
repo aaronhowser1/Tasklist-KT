@@ -2,6 +2,8 @@ package tasklist
 
 import kotlinx.datetime.*
 
+const val MAX_LINE_WIDTH = 44
+
 enum class Priority(val color: String) {
     C("\u001B[101m \u001B[0m"),  //Critical
     H("\u001B[103m \u001B[0m"),  //High
@@ -62,18 +64,31 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
         return LocalDateTime(year, month, day, hour, minute)
     }
 
-    fun getLineHeight(lineIndex: Int): Int = (lines[lineIndex].length / 44)
+    fun getLineHeight(lineIndex: Int): Int = (lines[lineIndex].length / MAX_LINE_WIDTH)
+
+    fun splitLine(lineIndex: Int): MutableList<String> {
+        var line = lines[lineIndex]
+        val outputLines = mutableListOf<String>()
+        while (true) {
+            if (line.length <= MAX_LINE_WIDTH) {
+                outputLines.add(line)
+                break
+            }
+            line = line.substring(MAX_LINE_WIDTH - 1)
+        }
+        return outputLines
+    }
 
     fun getFancy(taskNumber: Int): String {
         var taskHeight = 0
         for (lineIndex in 0 until lines.size) taskHeight += getLineHeight(lineIndex)
 
-        var output = ""
+        var output = "\n"
 
         for (i in 0 .. taskHeight) {
 
-            //First line
             if (i == 0) {
+                //First line of task
                 if (taskNumber in 1..9) {
                     //Two spaces for 1-9
                     output += "| $taskNumber  "
@@ -82,6 +97,9 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
                     output += "| $taskNumber "
                 }
                 output += "| $date | $time | ${priority.color} | ${due.color} "
+            } else {
+                //N-D
+                output += "|    |            |       |   |   "
             }
         }
 

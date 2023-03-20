@@ -47,9 +47,11 @@ class Tasklist {
         var taskNumber = 1
         for (task in list) {
             output += task.getFancy(taskNumber)
-            output += "+----+------------+-------+---+---+--------------------------------------------+"
+            output += "\n+----+------------+-------+---+---+--------------------------------------------+"
             taskNumber++
         }
+
+        println(output)
 
     }
 

@@ -3,7 +3,7 @@ package tasklist
 import kotlinx.datetime.*
 
 //Automates setting date and time, but not lines nor the menu
-const val autorun = false
+const val autorun = true
 
 val tasklist = Tasklist()
 
@@ -21,7 +21,8 @@ fun showMenu() {
                 println("Tasklist exiting!")
                 break
             }
-            "print" -> print()
+            "print" -> printFancy()
+            "simple" -> print()
             "edit" -> {
                 if (tasklist.size() != 0) print()
                 edit()
@@ -38,6 +39,8 @@ fun showMenu() {
         }
     }
 }
+
+fun printFancy() = tasklist.printListFancy()
 
 fun print() = tasklist.printList()
 
