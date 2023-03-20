@@ -26,10 +26,25 @@ class Task(val lines: MutableList<String>, val priority: Priority, val localDate
 
     }
 
+    fun getDateTime(): String {
+        val year = localDateTime.year
+        val month = localDateTime.monthNumber
+        val day = localDateTime.dayOfMonth
+
+        var hour = localDateTime.hour.toString()
+        if (hour.length == 1) hour = "0$hour"
+
+        var minute = localDateTime.minute.toString()
+        if (minute.length == 1) minute = "0$minute"
+
+        return "$year-$month-$day $hour:$minute"
+
+    }
+
     fun printTask(taskNumber: Int) {
 
         var output = if (taskNumber in 1 .. 9) "$taskNumber  " else "   "
-        output += "$localDateTime ${priority.name}\n"
+        output += "${getDateTime()} ${priority.name}\n"
 
         for (taskLine in 0 until lines.size) {
             output += "   ${getLine(taskLine)}"

@@ -3,7 +3,7 @@ package tasklist
 import kotlinx.datetime.*
 import java.lang.RuntimeException
 
-const val debug = true
+const val debug = false
 
 fun main() {
     showMenu()
