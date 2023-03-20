@@ -4,7 +4,9 @@ import kotlinx.datetime.*
 import java.lang.RuntimeException
 
 //Automates setting date and time, but not lines nor the menu
-const val autorun = true
+const val autorun = false
+
+val tasklist = Tasklist()
 
 fun main() {
     showMenu()
@@ -12,10 +14,8 @@ fun main() {
 
 fun showMenu() {
 
-    val tasklist = Tasklist()
-
     while (true) {
-        println("Input an action (add, print, end):")
+        println("Input an action (add, print, edit, delete, end):")
         when (readlnOrNull()?.trim()) {
             "add" -> addTask(tasklist)
             "end" -> {
@@ -23,8 +23,22 @@ fun showMenu() {
                 break
             }
             "print" -> tasklist.printList()
+//            "edit" -> edit()
+            "delete" -> deleteTask()
             else -> println("The input action is invalid")
         }
+    }
+}
+
+fun deleteTask() {
+    val input = inputFromPrompt("Input the task number (1-<Maximum task number>):")
+    if (input.lowercase() == "exit") return
+    try {
+        val taskIndex = input.toInt()
+        if (taskIndex !in 1 .. tasklist.size()) throw IllegalArgumentException()
+    } catch (e: Exception) {
+        println("Invalid task number")
+        deleteTask()
     }
 }
 
@@ -48,7 +62,7 @@ fun inputPriority(): Priority {
     } else {
         inputFromPrompt("Input the task priority (C, H, N, L):")
     }
-    return when (input?.lowercase()) {
+    return when (input.lowercase()) {
         "c" -> Priority.C
         "h" -> Priority.H
         "n" -> Priority.N
@@ -65,7 +79,7 @@ fun inputDate(): String {
         inputFromPrompt("Input the date (yyyy-mm-dd):")
     }
     try {
-        val inputSplit = input!!.split('-')
+        val inputSplit = input.split('-')
 
         // Will throw RuntimeException if invalid
         val date = LocalDate(inputSplit[0].toInt(),inputSplit[1].toInt(),inputSplit[2].toInt())
@@ -127,7 +141,7 @@ fun inputTaskLines(): MutableList<String> {
     return inputLines
 }
 
-fun inputFromPrompt(prompt: String): String? {
+fun inputFromPrompt(prompt: String): String {
     println(prompt)
     return readln()
 }

@@ -19,4 +19,6 @@ class Tasklist {
             task.printTask(taskIndex+1)
         }
     }
+
+    fun size() = list.size
 }
