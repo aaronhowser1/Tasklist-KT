@@ -32,7 +32,7 @@ fun showMenu() {
     println("Input the tasks (enter a blank line to end):")
 
     while (true) {
-        val input = readlnOrNull()
+        val input = readlnOrNull()?.trim()
         if (input.isNullOrBlank()) break else taskList.add(input)
     }
 
