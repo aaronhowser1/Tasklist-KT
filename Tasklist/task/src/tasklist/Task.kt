@@ -2,14 +2,14 @@ package tasklist
 
 import kotlinx.datetime.*
 
-enum class Priority(color: String) {
+enum class Priority(val color: String) {
     C("\u001B[101m \u001B[0m"),  //Critical
     H("\u001B[103m \u001B[0m"),  //High
     N("\u001B[102m \u001B[0m"),  //Normal
     L("\u001B[104m \u001B[0m")   //Low
 }
 
-enum class Due(color: String) {
+enum class Due(val color: String) {
     I("\u001B[102m \u001B[0m"),  //In time
     T("\u001B[103m \u001B[0m"),  //Today
     O("\u001B[101m \u001B[0m")   //Overdue
@@ -62,5 +62,30 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
         return LocalDateTime(year, month, day, hour, minute)
     }
 
+    fun getLineHeight(lineIndex: Int): Int = (lines[lineIndex].length / 44)
+
+    fun getFancy(taskNumber: Int): String {
+        var taskHeight = 0
+        for (lineIndex in 0 until lines.size) taskHeight += getLineHeight(lineIndex)
+
+        var output = ""
+
+        for (i in 0 .. taskHeight) {
+
+            //First line
+            if (i == 0) {
+                if (taskNumber in 1..9) {
+                    //Two spaces for 1-9
+                    output += "| $taskNumber  "
+                } else {
+                    //One space for 10+
+                    output += "| $taskNumber "
+                }
+                output += "| $date | $time | ${priority.color} | ${due.color} "
+            }
+        }
+
+        return output
+    }
 
 }

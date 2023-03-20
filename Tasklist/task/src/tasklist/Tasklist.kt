@@ -44,7 +44,12 @@ class Tasklist {
             +----+------------+-------+---+---+--------------------------------------------+
         """.trimIndent()
 
-
+        var taskNumber = 1
+        for (task in list) {
+            output += task.getFancy(taskNumber)
+            output += "+----+------------+-------+---+---+--------------------------------------------+"
+            taskNumber++
+        }
 
     }
 

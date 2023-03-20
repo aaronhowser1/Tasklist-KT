@@ -21,16 +21,16 @@ fun showMenu() {
                 println("Tasklist exiting!")
                 break
             }
-            "print" -> tasklist.printList()
+            "print" -> print()
             "edit" -> {
-                if (tasklist.size() != 0) tasklist.printList()
+                if (tasklist.size() != 0) print()
                 edit()
             }
             "delete" -> {
                 if (tasklist.size() == 0) {
                     println("No tasks have been input")
                 } else {
-                    tasklist.printList()
+                    print()
                     deleteTask()
                 }
             }
@@ -38,6 +38,8 @@ fun showMenu() {
         }
     }
 }
+
+fun print() = tasklist.printList()
 
 fun edit() {
     if (tasklist.size() == 0) {
