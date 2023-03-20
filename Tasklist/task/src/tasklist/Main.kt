@@ -31,12 +31,7 @@ class Tasklist {
     }
 }
 
-class Task(vararg lineArgs: String) {
-    val lines = mutableListOf<String>()
-
-    init {
-        for (line in lineArgs) lines.add(line)
-    }
+class Task(val lines: MutableList<String>) {
 
     override fun toString(): String {
         return lines.joinToString("\n")
@@ -52,9 +47,8 @@ fun showMenu() {
 
     val tasklist = Tasklist()
 
-    println("Input an action (add, print, end):")
-
     while (true) {
+        println("Input an action (add, print, end):")
         when (readlnOrNull()?.trim()) {
             "add" -> addTask(tasklist)
             "end" -> {
@@ -70,10 +64,18 @@ fun showMenu() {
 }
 
 fun addTask(tasklist: Tasklist) {
+    println("Input a new task (enter a blank line to end):")
+    val inputLines = mutableListOf<String>()
+    while (true) {
+        val input = readlnOrNull()?.trim()
+        if (input.isNullOrBlank()) break
+        inputLines.add(input)
+    }
 
-}
+    if (inputLines.isEmpty()) {
+        println("The task is blank")
+        return
+    }
 
-fun inputFromPrompt(prompt: String): String {
-    println(prompt)
-    return readln()
+    tasklist.add(Task(inputLines))
 }
