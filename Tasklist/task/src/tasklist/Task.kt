@@ -21,7 +21,7 @@ class Task(val lines: MutableList<String>, val priority: Priority, val date: Str
 
     fun printTask(taskNumber: Int) {
 
-        var output = if (taskNumber in 1 .. 9) "$taskNumber  " else "   "
+        var output = if (taskNumber in 1 .. 9) "$taskNumber  " else "$taskNumber "
         output += "$date $time ${priority.name}\n"
 
         for (taskLine in 0 until lines.size) {
