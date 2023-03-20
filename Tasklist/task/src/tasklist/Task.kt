@@ -20,7 +20,6 @@ class Task(val lines: MutableList<String>, val priority: Priority, val localDate
         var line = ""
 
         line += lines[lineIndex]
-        if (lineIndex == 0) line += " ${priority.name}"
         line += "\n"
 
         return line
@@ -30,13 +29,12 @@ class Task(val lines: MutableList<String>, val priority: Priority, val localDate
     fun printTask(taskNumber: Int) {
 
         var output = if (taskNumber in 1 .. 9) "$taskNumber  " else "   "
-        output += localDateTime
+        output += "$localDateTime ${priority.name}\n"
 
         for (taskLine in 0 until lines.size) {
-            output += if (taskLine == 0) taskNumber+1 else " "
-            output += if (taskNumber in 0..8) "  " else " "
-            output += getLine(taskLine)
+            output += "   ${getLine(taskLine)}"
         }
+        println(output)
     }
 
 }

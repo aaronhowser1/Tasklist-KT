@@ -16,7 +16,7 @@ class Tasklist {
         }
         for (taskIndex in 0 until list.size) {
             val task = list[taskIndex]
-            task.printTask(taskIndex)
+            task.printTask(taskIndex+1)
         }
     }
 }
