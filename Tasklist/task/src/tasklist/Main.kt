@@ -15,7 +15,7 @@ class Tasklist {
         for (taskIndex in 0 until list.size) {
             val task = list[taskIndex]
             for (taskLine in 0 until task.lines.size) {
-                output += if (taskIndex == 0) taskLine+1 else " "
+                output += if (taskLine == 0) taskIndex+1 else " "
                 output += "  "
                 output += task.lines[taskLine]
                 output += "\n"
