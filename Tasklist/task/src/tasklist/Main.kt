@@ -48,16 +48,15 @@ fun edit() {
     val task = tasklist.getTask(input.toInt())
 
     when (inputFromPrompt("Input a field to edit (priority, date, time, task):")) {
-        "priority" -> task.edit("priority")
-        "date" -> task.edit("date")
-        "time" -> task.edit("time")
-        "task" -> task.edit("task")
+        "priority" -> task.priority = inputPriority()
+        "date" -> task.date = inputDate()
+        "time" -> task.time = inputTime()
+        "task" -> task.lines = inputTaskLines()
         else -> {
             println("Invalid field")
             edit()
         }
     }
-
 }
 
 fun deleteTask() {
@@ -160,7 +159,7 @@ fun inputTaskLines(): MutableList<String> {
 
     if (inputLines.isEmpty()) {
         println("The task is blank")
-        return mutableListOf()
+        return inputTaskLines()
     }
     return inputLines
 }

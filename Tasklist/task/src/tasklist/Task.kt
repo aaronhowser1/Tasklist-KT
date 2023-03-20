@@ -15,7 +15,7 @@ enum class Due {
     O   //Overdue
 }
 
-class Task(val lines: MutableList<String>, val priority: Priority, val date: String, val time: String) {
+class Task(var lines: MutableList<String>, var priority: Priority, var date: String, var time: String) {
 
     val due: Due
         get() {
@@ -62,8 +62,5 @@ class Task(val lines: MutableList<String>, val priority: Priority, val date: Str
         return LocalDateTime(year, month, day, hour, minute)
     }
 
-    fun edit(field: String) {
-
-    }
 
 }
