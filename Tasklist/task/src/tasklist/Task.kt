@@ -74,27 +74,36 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
                 outputLines.add(line)
                 break
             }
+            outputLines.add(line.substring(0, MAX_LINE_WIDTH))
             line = line.substring(MAX_LINE_WIDTH - 1)
         }
         return outputLines
     }
 
     fun getFancy(taskNumber: Int): String {
-        var taskHeight = 0
-        for (lineIndex in 0 until lines.size) taskHeight += getLineHeight(lineIndex)
+//        var taskHeight = 0
+//        for (lineIndex in 0 until lines.size) taskHeight += getLineHeight(lineIndex)
+//
+        val allSplitLines = mutableListOf<String>()
+        for (lineIndex in 0 until lines.size) {
+            val splitLines = splitLine(lineIndex)
+            for (splitLine in splitLines) allSplitLines.add(splitLine)
+        }
 
-        var output = "\n"
+        val taskHeight = allSplitLines.size
+
+        var output = ""
 
         for (i in 0 .. taskHeight) {
-
+            output += "\n"
             if (i == 0) {
                 //First line of task
                 if (taskNumber in 1..9) {
                     //Two spaces for 1-9
-                    output += "| $taskNumber  "
+                    output += "| $taskNumber  |"
                 } else {
                     //One space for 10+
-                    output += "| $taskNumber "
+                    output += "| $taskNumber |"
                 }
                 output += "| $date | $time | ${priority.color} | ${due.color} "
             } else {
