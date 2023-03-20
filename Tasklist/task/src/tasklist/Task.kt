@@ -64,8 +64,6 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
         return LocalDateTime(year, month, day, hour, minute)
     }
 
-    fun getLineHeight(lineIndex: Int): Int = (lines[lineIndex].length / MAX_LINE_WIDTH)
-
     fun splitLine(lineIndex: Int): MutableList<String> {
         var line = lines[lineIndex]
         val outputLines = mutableListOf<String>()
@@ -81,9 +79,7 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
     }
 
     fun getFancy(taskNumber: Int): String {
-//        var taskHeight = 0
-//        for (lineIndex in 0 until lines.size) taskHeight += getLineHeight(lineIndex)
-//
+
         val allSplitLines = mutableListOf<String>()
         for (lineIndex in 0 until lines.size) {
             val splitLines = splitLine(lineIndex)
@@ -94,24 +90,31 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
 
         var output = ""
 
-        for (i in 0 .. taskHeight) {
+        for (i in 0  until  taskHeight) {
             output += "\n"
             if (i == 0) {
                 //First line of task
                 if (taskNumber in 1..9) {
                     //Two spaces for 1-9
-                    output += "| $taskNumber  |"
+                    output += "| $taskNumber  "
                 } else {
                     //One space for 10+
-                    output += "| $taskNumber |"
+                    output += "| $taskNumber "
                 }
-                output += "| $date | $time | ${priority.color} | ${due.color} "
+                output += "| $date | $time | ${priority.color} | ${due.color} |"
             } else {
                 //N-D
-                output += "|    |            |       |   |   "
+                output += "|    |            |       |   |   |"
+            }
+            for (splitLine in allSplitLines) {
+                output += splitLine
+                val spacesNeeded = MAX_LINE_WIDTH - splitLine.length
+                if (spacesNeeded > 0)
+                    output += " ".repeat(spacesNeeded)
+                output += "|"
             }
         }
-
+        //TODO: Figure out why it isn't properly splitting the line, and just doing the first over and over
         return output
     }
 

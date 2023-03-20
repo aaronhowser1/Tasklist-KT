@@ -1,6 +1,7 @@
 package tasklist
 
 import kotlinx.datetime.*
+import kotlin.random.Random
 
 //Automates setting date and time, but not lines nor the menu
 const val autorun = true
@@ -111,8 +112,10 @@ fun addTask(tasklist: Tasklist) {
 
 fun inputPriority(): Priority {
     val input = if (autorun) {
-        println("Input the task priority (C, H, N, L):\n> C")
-        "C"
+        println("Input the task priority (C, H, N, L):")
+        val randomPriority = arrayOf("C","H","N","L").random()
+        println("> $randomPriority")
+        randomPriority
     } else {
         inputFromPrompt("Input the task priority (C, H, N, L):")
     }
@@ -127,8 +130,10 @@ fun inputPriority(): Priority {
 
 fun inputDate(): String {
     val input = if (autorun) {
-        println("Input the date (yyyy-mm-dd):\n> 2023-03-20")
-         "2023-03-20"
+        println("Input the date (yyyy-mm-dd):")
+        val randomDate = "${Random.nextInt(2022,2025)}-${Random.nextInt(1,13)}-${Random.nextInt(1,28)}"
+        println("> $randomDate")
+        randomDate
     } else {
         inputFromPrompt("Input the date (yyyy-mm-dd):")
     }
@@ -154,8 +159,10 @@ fun inputDate(): String {
 
 fun inputTime(): String {
     val input = if (autorun) {
-        println("Input the time (hh:mm):\n> 12:00")
-        "12:00"
+        println("Input the time (hh:mm):")
+        val randomTime = "${Random.nextInt(0,24)}:${Random.nextInt(0,60)}"
+        println("> $randomTime")
+        randomTime
     } else {
         inputFromPrompt("Input the time (hh:mm):")
     }
