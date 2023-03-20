@@ -1,5 +1,6 @@
 package tasklist
 
+import kotlinx.datetime.*
 
 enum class Priority {
     C,  //Critical
@@ -8,7 +9,7 @@ enum class Priority {
     L   //Low
 }
 
-class Task(val lines: MutableList<String>) {
+class Task(val lines: MutableList<String>, val priority: Priority, val date: DatePeriod, val time: Time) {
 
     override fun toString(): String {
         return lines.joinToString("\n")
