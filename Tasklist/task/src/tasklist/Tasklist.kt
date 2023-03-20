@@ -9,18 +9,14 @@ class Tasklist {
         if (taskNumber in 1..list.size) list.removeAt(taskNumber-1)
     }
 
-    override fun toString(): String {
-        if (list.size == 0) return "No tasks have been input"
-        var output = ""
+    fun printList() {
+        if (list.size == 0) {
+            println("No tasks have been input")
+            return
+        }
         for (taskIndex in 0 until list.size) {
             val task = list[taskIndex]
-            for (taskLine in 0 until task.lines.size) {
-                output += if (taskLine == 0) taskIndex+1 else " "
-                output += if (taskIndex in 0..8) "  " else " "
-                output += task.getLine(taskLine)
-            }
-            output += "\n"
+            task.printTask(taskIndex)
         }
-        return output
     }
 }

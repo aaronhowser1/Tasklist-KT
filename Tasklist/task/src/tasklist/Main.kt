@@ -3,6 +3,8 @@ package tasklist
 import kotlinx.datetime.*
 import java.lang.RuntimeException
 
+const val debug = true
+
 fun main() {
     showMenu()
 }
@@ -19,7 +21,7 @@ fun showMenu() {
                 println("Tasklist exiting!")
                 break
             }
-            "print" -> println(tasklist)
+            "print" -> tasklist.printList()
             else -> println("The input action is invalid")
         }
     }
@@ -34,13 +36,19 @@ fun addTask(tasklist: Tasklist) {
     val dateTime = createDateTime(date, time)
 
     val taskLines = inputTaskLines()
+    if (taskLines.isEmpty()) return
 
     tasklist.add(Task(taskLines, priority, dateTime))
 }
 
 fun inputPriority(): Priority {
-    val input = inputFromPrompt("Input the task priority (C, H, N, L):")
-    return when (input.lowercase()) {
+    val input = if (debug) {
+        println("Input the task priority (C, H, N, L):\n> C")
+        "C"
+    } else {
+        inputFromPrompt("Input the task priority (C, H, N, L):")
+    }
+    return when (input?.lowercase()) {
         "c" -> Priority.C
         "h" -> Priority.H
         "n" -> Priority.N
@@ -50,9 +58,14 @@ fun inputPriority(): Priority {
 }
 
 fun inputDate(): LocalDate {
-    val input = inputFromPrompt("Input the date (yyyy-mm-dd):")
+    val input = if (debug) {
+        println("Input the date (yyyy-mm-dd):\n> 2023-03-20")
+         "2023-03-20"
+    } else {
+        inputFromPrompt("Input the date (yyyy-mm-dd):")
+    }
     try {
-        val inputSplit = input.split('-')
+        val inputSplit = input!!.split('-')
         val date = LocalDate(inputSplit[0].toInt(),inputSplit[1].toInt(),inputSplit[2].toInt())
         return date
     } catch (e: RuntimeException) {
@@ -62,9 +75,14 @@ fun inputDate(): LocalDate {
 }
 
 fun inputTime(): String {
-    val input = inputFromPrompt("Input the time (hh:mm):")
+    val input = if (debug) {
+        println("Input the time (hh:mm):\n> 12:00")
+        "12:00"
+    } else {
+        inputFromPrompt("Input the time (hh:mm):")
+    }
     try {
-        if (input.split(':').size != 2) throw RuntimeException("Time is not in hh:mm")
+        if (input?.split(':')?.size != 2) throw RuntimeException("Time is not in hh:mm")
 
         val hour = input.split(':').first().toInt()
         val minute = input.split(':').last().toInt()
@@ -105,14 +123,12 @@ fun inputTaskLines(): MutableList<String> {
 
     if (inputLines.isEmpty()) {
         println("The task is blank")
-        return inputTaskLines()
+        return mutableListOf()
     }
     return inputLines
 }
 
-fun inputFromPrompt(prompt: String): String {
+fun inputFromPrompt(prompt: String): String? {
     println(prompt)
-    var input = readlnOrNull()
-    if (input.isNullOrBlank()) input = inputFromPrompt(prompt)
-    return input
+    return readln()
 }
