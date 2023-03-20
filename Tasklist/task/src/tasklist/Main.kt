@@ -66,10 +66,17 @@ fun inputDate(): String {
     try {
         val inputSplit = input!!.split('-')
 
-        // Unused, but will throw RuntimeException if invalid
+        // Will throw RuntimeException if invalid
         val date = LocalDate(inputSplit[0].toInt(),inputSplit[1].toInt(),inputSplit[2].toInt())
 
-        return input
+        val year = date.year.toString()
+        var month = date.monthNumber.toString()
+        var day = date.dayOfMonth.toString()
+
+        if (month.length == 1) month = "0$month"
+        if (day.length == 1) day = "0$day"
+
+        return "$year-$month-$day"
     } catch (e: RuntimeException) {
         println("The input date is invalid")
         return inputDate()
