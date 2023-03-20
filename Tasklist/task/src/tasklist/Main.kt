@@ -10,13 +10,13 @@ class Tasklist {
     }
 
     override fun toString(): String {
-        if (list.size == 0) return "No tasks have been input."
+        if (list.size == 0) return "No tasks have been input"
         var output = ""
         for (taskIndex in 0 until list.size) {
             val task = list[taskIndex]
             for (taskLine in 0 until task.lines.size) {
                 output += if (taskLine == 0) taskIndex+1 else " "
-                output += "  "
+                output += if (taskIndex in 0..8) "  " else " "
                 output += task.lines[taskLine]
                 output += "\n"
                 // Example:
@@ -26,6 +26,7 @@ class Tasklist {
                 //   milk         (taskLine[3])
                 //   meat         (taskLine[4])
             }
+            output += "\n"
         }
         return output
     }
@@ -52,15 +53,13 @@ fun showMenu() {
         when (readlnOrNull()?.trim()) {
             "add" -> addTask(tasklist)
             "end" -> {
-                println("Tasklist ending!")
+                println("Tasklist exiting!")
                 break
             }
             "print" -> println(tasklist)
             else -> println("The input action is invalid")
         }
     }
-
-    println(tasklist)
 }
 
 fun addTask(tasklist: Tasklist) {
