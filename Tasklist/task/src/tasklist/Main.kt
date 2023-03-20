@@ -31,12 +31,11 @@ fun addTask(tasklist: Tasklist) {
 
     val date = inputDate()
     val time = inputTime()
+    val dateTime = createDateTime(date, time)
 
     val taskLines = inputTaskLines()
 
-
-
-    tasklist.add(Task(taskLines, priority, date, time))
+    tasklist.add(Task(taskLines, priority, dateTime))
 }
 
 fun inputPriority(): Priority {
@@ -62,8 +61,37 @@ fun inputDate(): LocalDate {
     }
 }
 
-fun inputTime() {
+fun inputTime(): String {
     val input = inputFromPrompt("Input the time (hh:mm):")
+    try {
+        if (input.split(':').size != 2) throw RuntimeException("Time is not in hh:mm")
+
+        val hour = input.split(':').first().toInt()
+        val minute = input.split(':').last().toInt()
+
+        if (hour !in 0..23) throw RuntimeException("Hour $hour is not in 0-23")
+        if (minute !in 0..59) throw RuntimeException("Minute $minute is not in 0-59")
+
+        //Unused, but will throw RuntimeException if invalid
+        val testLocalDateTime = LocalDateTime(1, 1, 1, hour, minute)
+
+        return input
+
+    } catch (e: RuntimeException) {
+        println("The input time is invalid")
+        return inputTime()
+    }
+}
+
+fun createDateTime(localDate: LocalDate, time: String): LocalDateTime {
+
+    val year = localDate.year
+    val month = localDate.monthNumber
+    val day = localDate.dayOfMonth
+    val hour = time.split(':').first().toInt()
+    val minute = time.split(':').last().toInt()
+
+    return LocalDateTime(year, month, day, hour, minute)
 }
 
 fun inputTaskLines(): MutableList<String> {
@@ -77,7 +105,7 @@ fun inputTaskLines(): MutableList<String> {
 
     if (inputLines.isEmpty()) {
         println("The task is blank")
-        return
+        return inputTaskLines()
     }
     return inputLines
 }

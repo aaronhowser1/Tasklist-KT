@@ -9,7 +9,7 @@ enum class Priority {
     L   //Low
 }
 
-class Task(val lines: MutableList<String>, val priority: Priority, val date: DatePeriod, val time: Time) {
+class Task(val lines: MutableList<String>, val priority: Priority, val localDateTime: LocalDateTime) {
 
     override fun toString(): String {
         return lines.joinToString("\n")
