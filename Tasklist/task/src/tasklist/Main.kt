@@ -3,7 +3,8 @@ package tasklist
 import kotlinx.datetime.*
 import java.lang.RuntimeException
 
-const val debug = false
+//Automates setting date and time, but not lines nor the menu
+const val autorun = true
 
 fun main() {
     showMenu()
@@ -41,7 +42,7 @@ fun addTask(tasklist: Tasklist) {
 }
 
 fun inputPriority(): Priority {
-    val input = if (debug) {
+    val input = if (autorun) {
         println("Input the task priority (C, H, N, L):\n> C")
         "C"
     } else {
@@ -57,7 +58,7 @@ fun inputPriority(): Priority {
 }
 
 fun inputDate(): String {
-    val input = if (debug) {
+    val input = if (autorun) {
         println("Input the date (yyyy-mm-dd):\n> 2023-03-20")
          "2023-03-20"
     } else {
@@ -84,7 +85,7 @@ fun inputDate(): String {
 }
 
 fun inputTime(): String {
-    val input = if (debug) {
+    val input = if (autorun) {
         println("Input the time (hh:mm):\n> 12:00")
         "12:00"
     } else {
