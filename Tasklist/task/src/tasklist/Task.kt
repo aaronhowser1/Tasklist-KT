@@ -15,4 +15,16 @@ class Task(val lines: MutableList<String>, val priority: Priority, val localDate
         return lines.joinToString("\n")
     }
 
+    fun getLine(lineIndex: Int): String? {
+        if (lineIndex !in 0 until lines.size) return null
+        var line = ""
+
+        line += lines[lineIndex]
+        if (lineIndex == 0) line += " ${priority.name}"
+        line += "\n"
+
+        return line
+
+    }
+
 }

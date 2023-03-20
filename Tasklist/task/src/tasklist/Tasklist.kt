@@ -1,7 +1,5 @@
 package tasklist
 
-import kotlinx.datetime.*
-
 class Tasklist {
     private val list = mutableListOf<Task>()
 
@@ -19,14 +17,7 @@ class Tasklist {
             for (taskLine in 0 until task.lines.size) {
                 output += if (taskLine == 0) taskIndex+1 else " "
                 output += if (taskIndex in 0..8) "  " else " "
-                output += task.lines[taskLine]
-                output += "\n"
-                // Example:
-                // 1  Supermarket (taskLine[0])
-                //   -----------  (taskLine[1])
-                //   butter       (taskLine[2])
-                //   milk         (taskLine[3])
-                //   meat         (taskLine[4])
+                output += task.getLine(taskLine)
             }
             output += "\n"
         }
