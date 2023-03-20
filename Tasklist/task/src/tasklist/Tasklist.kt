@@ -31,6 +31,23 @@ class Tasklist {
         }
     }
 
+    fun printListFancy() {
+
+        if (list.size == 0) {
+            println("No tasks have been input")
+            return
+        }
+
+        var output = """
+            +----+------------+-------+---+---+--------------------------------------------+
+            | N  |    Date    | Time  | P | D |                   Task                     |
+            +----+------------+-------+---+---+--------------------------------------------+
+        """.trimIndent()
+
+
+
+    }
+
     fun getTask(taskNumber: Int) = list[taskNumber-1]
 
     fun size() = list.size

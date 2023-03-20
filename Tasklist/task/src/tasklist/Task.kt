@@ -2,17 +2,17 @@ package tasklist
 
 import kotlinx.datetime.*
 
-enum class Priority {
-    C,  //Critical
-    H,  //High
-    N,  //Normal
-    L   //Low
+enum class Priority(color: String) {
+    C("\u001B[101m \u001B[0m"),  //Critical
+    H("\u001B[103m \u001B[0m"),  //High
+    N("\u001B[102m \u001B[0m"),  //Normal
+    L("\u001B[104m \u001B[0m")   //Low
 }
 
-enum class Due {
-    I,  //In time
-    T,  //Today
-    O   //Overdue
+enum class Due(color: String) {
+    I("\u001B[102m \u001B[0m"),  //In time
+    T("\u001B[103m \u001B[0m"),  //Today
+    O("\u001B[101m \u001B[0m")   //Overdue
 }
 
 class Task(var lines: MutableList<String>, var priority: Priority, var date: String, var time: String) {
