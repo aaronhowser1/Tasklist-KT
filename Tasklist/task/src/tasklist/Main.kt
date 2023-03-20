@@ -4,7 +4,7 @@ import kotlinx.datetime.*
 import java.lang.RuntimeException
 
 //Automates setting date and time, but not lines nor the menu
-const val autorun = true
+const val autorun = false
 
 val tasklist = Tasklist()
 
@@ -60,6 +60,10 @@ fun edit() {
 }
 
 fun deleteTask() {
+    if (tasklist.size() == 0) {
+        println("No tasks have been input")
+        return
+    }
     val input = inputFromPrompt("Input the task number (1-${tasklist.size()}):")
     if (input.lowercase() == "exit") return
     tasklist.remove(input.toInt())
@@ -159,7 +163,7 @@ fun inputTaskLines(): MutableList<String> {
 
     if (inputLines.isEmpty()) {
         println("The task is blank")
-        return inputTaskLines()
+        return mutableListOf()
     }
     return inputLines
 }
