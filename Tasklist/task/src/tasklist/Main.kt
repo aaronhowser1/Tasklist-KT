@@ -1,6 +1,6 @@
 package tasklist
 
-class TaskList {
+class Tasklist {
     private val list = mutableListOf<String>()
 
     fun add(task: String) = list.add(task)
@@ -21,22 +21,46 @@ class TaskList {
     }
 }
 
+class Task(vararg lineArgs: String) {
+    private val lines = mutableListOf<String>()
+
+    init {
+        for (line in lineArgs) lines.add(line)
+    }
+
+    override fun toString(): String {
+        return lines.joinToString("\n")
+    }
+
+}
+
 fun main() {
     showMenu()
 }
 
 fun showMenu() {
 
-    val taskList = TaskList()
+    val tasklist = Tasklist()
 
-    println("Input the tasks (enter a blank line to end):")
+    println("Input an action (add, print, end):")
 
     while (true) {
-        val input = readlnOrNull()?.trim()
-        if (input.isNullOrBlank()) break else taskList.add(input)
+        when (readlnOrNull()?.trim()) {
+            "add" -> addTask(tasklist)
+            "end" -> {
+                println("Tasklist ending!")
+                break
+            }
+            "print" -> println(tasklist)
+            else -> println("The input action is invalid")
+        }
     }
 
-    println(taskList)
+    println(tasklist)
+}
+
+fun addTask(tasklist: Tasklist) {
+
 }
 
 fun inputFromPrompt(prompt: String): String {
