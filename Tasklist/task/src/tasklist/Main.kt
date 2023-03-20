@@ -33,12 +33,11 @@ fun addTask(tasklist: Tasklist) {
 
     val date = inputDate()
     val time = inputTime()
-    val dateTime = createDateTime(date, time)
 
     val taskLines = inputTaskLines()
     if (taskLines.isEmpty()) return
 
-    tasklist.add(Task(taskLines, priority, dateTime))
+    tasklist.add(Task(taskLines, priority, date, time))
 }
 
 fun inputPriority(): Priority {
@@ -57,7 +56,7 @@ fun inputPriority(): Priority {
     }
 }
 
-fun inputDate(): LocalDate {
+fun inputDate(): String {
     val input = if (debug) {
         println("Input the date (yyyy-mm-dd):\n> 2023-03-20")
          "2023-03-20"
@@ -66,8 +65,11 @@ fun inputDate(): LocalDate {
     }
     try {
         val inputSplit = input!!.split('-')
+
+        // Unused, but will throw RuntimeException if invalid
         val date = LocalDate(inputSplit[0].toInt(),inputSplit[1].toInt(),inputSplit[2].toInt())
-        return date
+
+        return input
     } catch (e: RuntimeException) {
         println("The input date is invalid")
         return inputDate()
@@ -90,7 +92,7 @@ fun inputTime(): String {
         if (hour !in 0..23) throw RuntimeException("Hour $hour is not in 0-23")
         if (minute !in 0..59) throw RuntimeException("Minute $minute is not in 0-59")
 
-        //Unused, but will throw RuntimeException if invalid
+        // Unused, but will throw RuntimeException if invalid
         val testLocalDateTime = LocalDateTime(1, 1, 1, hour, minute)
 
         return input
@@ -99,17 +101,6 @@ fun inputTime(): String {
         println("The input time is invalid")
         return inputTime()
     }
-}
-
-fun createDateTime(localDate: LocalDate, time: String): LocalDateTime {
-
-    val year = localDate.year
-    val month = localDate.monthNumber
-    val day = localDate.dayOfMonth
-    val hour = time.split(':').first().toInt()
-    val minute = time.split(':').last().toInt()
-
-    return LocalDateTime(year, month, day, hour, minute)
 }
 
 fun inputTaskLines(): MutableList<String> {
