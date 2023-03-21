@@ -1,18 +1,24 @@
 package tasklist
 
 import kotlinx.datetime.*
+import com.squareup.moshi.*
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import java.io.File
 import kotlin.random.Random
 
 //Automates setting date and time, but not lines nor the menu
 const val autorun = false
 
-val tasklist = Tasklist()
+val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+val tasklistAdapter = moshi.adapter(Tasklist::class.java)
 
 fun main() {
     showMenu()
 }
 
 fun showMenu() {
+
+    val tasklist = readFile(File("tasklist.json"))
 
     while (true) {
         println("Input an action (add, print, edit, delete, end):")
@@ -22,18 +28,18 @@ fun showMenu() {
                 println("Tasklist exiting!")
                 break
             }
-            "print" -> printFancy()
-            "simple" -> print()
+            "print" -> printFancy(tasklist)
+            "simple" -> print(tasklist)
             "edit" -> {
-                if (tasklist.size() != 0) printFancy()
-                edit()
+                if (tasklist.size() != 0) printFancy(tasklist)
+                edit(tasklist)
             }
             "delete" -> {
                 if (tasklist.size() == 0) {
                     println("No tasks have been input")
                 } else {
-                    printFancy()
-                    deleteTask()
+                    printFancy(tasklist)
+                    deleteTask(tasklist)
                 }
             }
             else -> println("The input action is invalid")
@@ -42,11 +48,11 @@ fun showMenu() {
 
 }
 
-fun printFancy() = tasklist.printListFancy()
+fun printFancy(tasklist: Tasklist) = tasklist.printListFancy()
 
-fun print() = tasklist.printList()
+fun print(tasklist: Tasklist) = tasklist.printList()
 
-fun edit() {
+fun edit(tasklist: Tasklist) {
     if (tasklist.size() == 0) {
         println("No tasks have been input")
         return
@@ -60,7 +66,7 @@ fun edit() {
         if (taskNumber !in 1..tasklist.size()) throw IllegalArgumentException()
     } catch (e: Exception) {
         println("Invalid task number")
-        edit()
+        edit(tasklist)
         return
     }
 
@@ -92,10 +98,10 @@ fun edit() {
 
 }
 
-fun deleteTask() {
+fun deleteTask(tasklist: Tasklist) {
     val input = inputFromPrompt("Input the task number (1-${tasklist.size()}):")
     if (input.lowercase() == "exit") return
-    if (!tasklist.remove(input)) deleteTask()
+    if (!tasklist.remove(input)) deleteTask(tasklist)
 }
 
 fun addTask(tasklist: Tasklist) {
@@ -209,4 +215,21 @@ fun inputTaskLines(): MutableList<String> {
 fun inputFromPrompt(prompt: String): String {
     println(prompt)
     return readln()
+}
+
+
+fun readFile(file: File): Tasklist {
+
+    return try {
+        tasklistAdapter.fromJson(file.readText())!!
+        //If the file doesn't work, or if the file isn't a valid json,
+        //throws and catches the exception, and returns a new empty Tasklist
+    } catch (e: Exception) {
+        Tasklist()
+    }
+
+}
+
+fun saveFile(file: File) {
+
 }
