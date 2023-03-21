@@ -39,6 +39,7 @@ fun showMenu() {
             else -> println("The input action is invalid")
         }
     }
+
 }
 
 fun printFancy() = tasklist.printListFancy()
