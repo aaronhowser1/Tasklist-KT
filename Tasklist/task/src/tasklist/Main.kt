@@ -232,7 +232,7 @@ fun readFile(file: File): Tasklist {
         //If the file doesn't work, or if the file isn't a valid json,
         //throws and catches the exception, and returns a new empty Tasklist
     } catch (e: Exception) {
-        Tasklist()
+        Tasklist(mutableListOf())
     }
 
 }

@@ -1,7 +1,6 @@
 package tasklist
 
-class Tasklist {
-    private val list = mutableListOf<Task>()
+class Tasklist(val list: MutableList<Task>) {
 
     fun add(task: Task) = list.add(task)
 
