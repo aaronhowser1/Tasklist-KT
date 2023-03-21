@@ -73,7 +73,7 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
                 break
             }
             outputLines.add(line.substring(0, MAX_LINE_WIDTH))
-            line = line.substring(MAX_LINE_WIDTH - 1)
+            line = line.substring(MAX_LINE_WIDTH)
         }
 //        println("The line $line has been split into the list $outputLines")
         return outputLines

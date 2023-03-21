@@ -25,14 +25,14 @@ fun showMenu() {
             "print" -> printFancy()
             "simple" -> print()
             "edit" -> {
-                if (tasklist.size() != 0) print()
+                if (tasklist.size() != 0) printFancy()
                 edit()
             }
             "delete" -> {
                 if (tasklist.size() == 0) {
                     println("No tasks have been input")
                 } else {
-                    print()
+                    printFancy()
                     deleteTask()
                 }
             }
