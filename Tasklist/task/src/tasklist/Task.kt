@@ -75,6 +75,7 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
             outputLines.add(line.substring(0, MAX_LINE_WIDTH))
             line = line.substring(MAX_LINE_WIDTH - 1)
         }
+//        println("The line $line has been split into the list $outputLines")
         return outputLines
     }
 
@@ -106,15 +107,14 @@ class Task(var lines: MutableList<String>, var priority: Priority, var date: Str
                 //N-D
                 output += "|    |            |       |   |   |"
             }
-            for (splitLine in allSplitLines) {
-                output += splitLine
-                val spacesNeeded = MAX_LINE_WIDTH - splitLine.length
-                if (spacesNeeded > 0)
-                    output += " ".repeat(spacesNeeded)
-                output += "|"
-            }
+
+            val currentLineSplice = allSplitLines[i]
+            output += currentLineSplice
+
+            val spacesNeeded = MAX_LINE_WIDTH - currentLineSplice.length
+            if (spacesNeeded > 0) output += " ".repeat(spacesNeeded)
+            output += "|"
         }
-        //TODO: Figure out why it isn't properly splitting the line, and just doing the first over and over
         return output
     }
 

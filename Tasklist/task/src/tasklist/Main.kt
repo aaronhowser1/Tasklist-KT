@@ -4,7 +4,7 @@ import kotlinx.datetime.*
 import kotlin.random.Random
 
 //Automates setting date and time, but not lines nor the menu
-const val autorun = true
+const val autorun = false
 
 val tasklist = Tasklist()
 
