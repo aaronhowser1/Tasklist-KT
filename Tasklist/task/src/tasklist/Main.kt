@@ -8,7 +8,7 @@ import kotlin.random.Random
 
 //Automates setting date and time, but not lines nor the menu
 const val autorun = false
-const val fileInWorkingDir = true
+const val fileInWorkingDir = false
 
 val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 val tasklistAdapter = moshi.adapter(Tasklist::class.java)
@@ -205,6 +205,22 @@ fun inputTime(): String {
 
 fun inputTaskLines(): MutableList<String> {
     println("Input a new task (enter a blank line to end):")
+
+    if (autorun) {
+        val randomLineCount = Random.nextInt(1,4)
+        val randomlyGeneratesLines = mutableListOf<String>()
+
+        for (i in 0 until randomLineCount) {
+            val lineLength = Random.nextInt(30, 140)
+            var randomlyGeneratedLine = ""
+            for (j in 0 until lineLength) randomlyGeneratedLine += listOf(('0'..'9'), ('a'..'z'), ('A'..'Z'),(' '..' ')).flatten().random()
+            println("> $randomlyGeneratedLine")
+            randomlyGeneratesLines.add(randomlyGeneratedLine)
+        }
+
+        return randomlyGeneratesLines
+    }
+
     val inputLines = mutableListOf<String>()
     while (true) {
         val input = readlnOrNull()?.trim()
