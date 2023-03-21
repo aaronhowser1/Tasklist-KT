@@ -8,6 +8,7 @@ import kotlin.random.Random
 
 //Automates setting date and time, but not lines nor the menu
 const val autorun = false
+const val fileInWorkingDir = true
 
 val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 val tasklistAdapter = moshi.adapter(Tasklist::class.java)
@@ -18,14 +19,15 @@ fun main() {
 
 fun showMenu() {
 
-    val tasklist = readFile(File("tasklist.json"))
+    val jsonFile = if (fileInWorkingDir) File("Tasklist/task/src/tasklist/tasklist.json") else File("tasklist.json")
+    val tasklist = readFile(jsonFile)
 
     while (true) {
         println("Input an action (add, print, edit, delete, end):")
         when (readlnOrNull()?.trim()) {
             "add" -> addTask(tasklist)
             "end" -> {
-                println("Tasklist exiting!")
+                end(jsonFile, tasklist)
                 break
             }
             "print" -> printFancy(tasklist)
@@ -46,6 +48,11 @@ fun showMenu() {
         }
     }
 
+}
+
+fun end(saveFile: File, tasklist: Tasklist) {
+    println("Tasklist exiting!")
+    saveFile(saveFile, tasklist)
 }
 
 fun printFancy(tasklist: Tasklist) = tasklist.printListFancy()
@@ -230,6 +237,6 @@ fun readFile(file: File): Tasklist {
 
 }
 
-fun saveFile(file: File) {
-
+fun saveFile(file: File, tasklist: Tasklist) {
+    file.writeText(tasklistAdapter.toJson(tasklist))
 }
