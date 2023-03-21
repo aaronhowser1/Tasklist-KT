@@ -4,6 +4,7 @@ import kotlinx.datetime.*
 import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.io.File
+import java.lang.reflect.ParameterizedType
 import kotlin.random.Random
 
 //Automates setting date and time, but not lines nor the menu
@@ -11,7 +12,8 @@ const val autorun = false
 const val fileInWorkingDir = false
 
 val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-val tasklistAdapter = moshi.adapter(Tasklist::class.java)
+val type: ParameterizedType = Types.newParameterizedType(List::class.java, Task::class.java)
+val tasklistAdapter: JsonAdapter<List<Task>> = moshi.adapter(type)
 
 fun main() {
     showMenu()
@@ -20,7 +22,7 @@ fun main() {
 fun showMenu() {
 
     val jsonFile = if (fileInWorkingDir) File("Tasklist/task/src/tasklist/tasklist.json") else File("tasklist.json")
-    val tasklist = readFile(jsonFile)
+    val tasklist = Tasklist(readFile(jsonFile).toMutableList())
 
     while (true) {
         println("Input an action (add, print, edit, delete, end):")
@@ -241,18 +243,18 @@ fun inputFromPrompt(prompt: String): String {
 }
 
 
-fun readFile(file: File): Tasklist {
+fun readFile(file: File): List<Task> {
 
     return try {
         tasklistAdapter.fromJson(file.readText())!!
         //If the file doesn't work, or if the file isn't a valid json,
         //throws and catches the exception, and returns a new empty Tasklist
     } catch (e: Exception) {
-        Tasklist(mutableListOf())
+        listOf<Task>()
     }
 
 }
 
 fun saveFile(file: File, tasklist: Tasklist) {
-    file.writeText(tasklistAdapter.toJson(tasklist))
+    file.writeText(tasklistAdapter.toJson(tasklist.list))
 }
